@@ -8,11 +8,20 @@ services:
       - "8000:8000"
     environment:
       - APP_ENV=production
-      - API_TOKEN=${API_TOKEN:-dev-token-123}
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
       - LLM_API_KEY=${LLM_API_KEY:-}
       - LLM_MODEL=gpt-4o-mini
       - CORS_ORIGINS=*
-      - LOG_LEVEL=INFO
+      - DB_PATH=/data/app.db
     volumes:
-      - ./data:/app/data
+      - super_parent_data:/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  super_parent_data:

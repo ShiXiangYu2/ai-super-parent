@@ -1,15 +1,37 @@
 {% extends "base.html" %}
 {% block title %}登录{% endblock %}
 {% block content %}
-<div class="max-w-md mx-auto mt-16">
-    <div class="bg-white p-8 rounded-lg shadow-sm border">
-        <h2 class="text-2xl font-bold text-center mb-6">登录</h2>
+<div class="max-w-lg mx-auto mt-8">
+    <div class="bg-white p-8 rounded-xl shadow-sm border">
+        <h2 class="text-2xl font-bold text-center mb-2">登录</h2>
+        <p class="text-center text-gray-500 text-sm mb-6">选择角色快速体验，或手动输入账号密码</p>
+
+        <!-- 快速切换角色 -->
+        <div class="grid grid-cols-3 gap-2 mb-6">
+            <button onclick="quickLogin('admin@demo.com','admin123')" class="p-3 rounded-lg border hover:bg-yellow-50 hover:border-yellow-300 transition text-center">
+                <div class="text-lg mb-1">👑</div>
+                <div class="text-xs font-medium">平台管理员</div>
+                <div class="text-xs text-gray-400">多机构管理</div>
+            </button>
+            <button onclick="quickLogin('teacher@demo.com','teacher123')" class="p-3 rounded-lg border hover:bg-green-50 hover:border-green-300 transition text-center">
+                <div class="text-lg mb-1">👨‍🏫</div>
+                <div class="text-xs font-medium">教师</div>
+                <div class="text-xs text-gray-400">班级与评语</div>
+            </button>
+            <button onclick="quickLogin('parent@demo.com','parent123')" class="p-3 rounded-lg border hover:bg-blue-50 hover:border-blue-300 transition text-center">
+                <div class="text-lg mb-1">👪</div>
+                <div class="text-xs font-medium">家长</div>
+                <div class="text-xs text-gray-400">育儿+报告</div>
+            </button>
+        </div>
+
+        <div class="relative mb-6">
+            <div class="absolute inset-0 flex items-center"><div class="w-full border-t"></div></div>
+            <div class="relative flex justify-center text-sm"><span class="bg-white px-2 text-gray-400">或手动登录</span></div>
+        </div>
+
         <div id="login-error" class="hidden bg-red-50 text-red-600 p-3 rounded mb-4 text-sm"></div>
         <form id="login-form" onsubmit="return doLogin(event)">
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">租户 ID</label>
-                <input type="text" id="tenant-id" class="w-full border rounded-lg px-3 py-2" placeholder="留空则自动匹配">
-            </div>
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
                 <input type="email" id="email" value="parent@demo.com" class="w-full border rounded-lg px-3 py-2" required>
@@ -18,14 +40,20 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">密码</label>
                 <input type="password" id="password" value="parent123" class="w-full border rounded-lg px-3 py-2" required>
             </div>
-            <button type="submit" class="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 font-medium">
+            <button type="submit" class="w-full bg-primary-600 text-white py-2.5 rounded-lg hover:bg-primary-700 font-medium transition">
                 登录
             </button>
         </form>
-        <div class="mt-6 text-xs text-gray-400">
-            <p>园长: admin@demo.com / admin123</p>
-            <p>教师: teacher@demo.com / teacher123</p>
-            <p>家长: parent@demo.com / parent123</p>
+
+        <div class="mt-6 bg-gray-50 rounded-lg p-4">
+            <p class="text-xs font-medium text-gray-500 mb-2">📋 所有演示账号</p>
+            <table class="w-full text-xs text-gray-500">
+                <tr class="border-b"><td class="py-1">👑 平台管理员</td><td>admin@demo.com</td><td>admin123</td><td>机构管理、数据总览</td></tr>
+                <tr class="border-b"><td class="py-1">👨‍🏫 教师</td><td>teacher@demo.com</td><td>teacher123</td><td>班级管理、撰写评语</td></tr>
+                <tr class="border-b"><td class="py-1">👪 家长1</td><td>parent@demo.com</td><td>parent123</td><td>育儿问答、成长报告</td></tr>
+                <tr class="border-b"><td class="py-1">👪 家长2</td><td>parent2@demo.com</td><td>parent123</td><td>育儿问答、成长报告</td></tr>
+                <tr><td class="py-1">👪 家长3</td><td>parent3@demo.com</td><td>parent123</td><td>育儿问答、成长报告</td></tr>
+            </table>
         </div>
     </div>
 </div>
@@ -39,7 +67,7 @@ async function doLogin(e) {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                tenant_id: document.getElementById('tenant-id').value,
+                tenant_id: '',
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
             })
@@ -49,6 +77,12 @@ async function doLogin(e) {
         localStorage.setItem('token', data.token);
         window.location.href = '/app/dashboard';
     } catch(e) { errEl.textContent = '网络错误'; errEl.classList.remove('hidden'); }
+}
+
+function quickLogin(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+    document.getElementById('login-form').dispatchEvent(new Event('submit'));
 }
 </script>
 {% endblock %}

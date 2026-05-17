@@ -1,31 +1,78 @@
 {% extends "base.html" %}
 {% block title %}首页{% endblock %}
 {% block content %}
-<div class="text-center py-16">
-    <h1 class="text-4xl font-bold text-gray-900 mb-4">超级家长 AI</h1>
-    <p class="text-xl text-gray-600 mb-8">B2B SaaS 家校共育智能平台 — 每个家长，都有一个 AI 育儿顾问</p>
-    <div class="flex justify-center space-x-4">
-        <a href="/app/login" class="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700">登录体验</a>
-    </div>
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-        <div class="bg-white p-6 rounded-lg shadow-sm border">
-            <h3 class="text-lg font-semibold mb-2">AI 育儿问答</h3>
-            <p class="text-gray-600 text-sm">基于孩子年龄和发展阶段，提供个性化、可操作的育儿建议</p>
+<div class="text-center py-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">
+                <span class="text-primary-600">超级家长</span> AI
+            </h1>
+            <p class="text-xl text-gray-600 mb-4">B2B SaaS 家校共育智能平台</p>
+            <p class="text-gray-500 mb-8">每个孩子，都有一个 AI 育儿顾问 | 每位教师，都有一个 AI 协作助手</p>
+            <a href="/app/login" class="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 font-medium text-lg transition shadow-sm">
+                立即体验 Demo
+            </a>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-sm border">
-            <h3 class="text-lg font-semibold mb-2">成长报告</h3>
-            <p class="text-gray-600 text-sm">每月自动生成多维度发展报告，跟踪孩子的成长轨迹</p>
+
+        <!-- 核心能力 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+                <div class="text-3xl mb-3">🤖</div>
+                <h3 class="text-lg font-semibold mb-2">AI 育儿问答</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">基于孩子年龄和发展阶段，提供个性化、可操作的育儿建议。从情绪管理到学习习惯，AI 7×24 小时在线解答。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+                <div class="text-3xl mb-3">📊</div>
+                <h3 class="text-lg font-semibold mb-2">成长报告</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">每月自动生成多维度发展报告（认知、语言、社交、运动、艺术），可视化跟踪孩子成长轨迹，AI 撰写专业评语。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+                <div class="text-3xl mb-3">💬</div>
+                <h3 class="text-lg font-semibold mb-2">评语辅助</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">AI 辅助教师撰写个性化家长沟通内容，支持多种语气和场景，大幅提升家校沟通效率和质量。</p>
+            </div>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-sm border">
-            <h3 class="text-lg font-semibold mb-2">评语辅助</h3>
-            <p class="text-gray-600 text-sm">AI 辅助教师撰写个性化家长沟通内容，提升家校共育效率</p>
+
+        <!-- 角色流程 -->
+        <div class="bg-white rounded-xl shadow-sm border p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6">产品使用流程</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <div class="border-l-4 border-primary-500 pl-4">
+                    <div class="text-sm text-primary-600 font-semibold mb-1">👑 平台管理员</div>
+                    <h4 class="font-medium mb-1">注册 → 创建机构 → 管理订阅</h4>
+                    <p class="text-sm text-gray-500">多租户管理后台，一键创建机构、管理教师账号、查看用量统计。</p>
+                </div>
+                <div class="border-l-4 border-green-500 pl-4">
+                    <div class="text-sm text-green-600 font-semibold mb-1">👨‍🏫 教师</div>
+                    <h4 class="font-medium mb-1">登录 → 查看班级 → AI 撰写评语</h4>
+                    <p class="text-sm text-gray-500">班级学生一览，AI 辅助撰写个性化评语，提升家校沟通效率。</p>
+                </div>
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <div class="text-sm text-blue-600 font-semibold mb-1">👪 家长</div>
+                    <h4 class="font-medium mb-1">登录 → AI 问答 → 查看成长报告</h4>
+                    <p class="text-sm text-gray-500">随时向 AI 咨询育儿问题，每月查看孩子多维度成长发展报告。</p>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="mt-8 text-center text-sm text-gray-500">
-        <p>演示账号:</p>
-        <p>园长: admin@demo.com / admin123</p>
-        <p>教师: teacher@demo.com / teacher123</p>
-        <p>家长: parent@demo.com / parent123</p>
+
+        <!-- 演示账号 -->
+        <div class="bg-gray-50 rounded-xl p-6 text-sm text-gray-500">
+            <p class="font-medium text-gray-700 mb-3">🎯 快速体验 Demo 账号</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="bg-white rounded p-3 border">
+                    <span class="font-medium">👑 管理员</span>
+                    <div class="text-xs mt-1">admin@demo.com / admin123</div>
+                </div>
+                <div class="bg-white rounded p-3 border">
+                    <span class="font-medium">👨‍🏫 教师</span>
+                    <div class="text-xs mt-1">teacher@demo.com / teacher123</div>
+                </div>
+                <div class="bg-white rounded p-3 border">
+                    <span class="font-medium">👪 家长</span>
+                    <div class="text-xs mt-1">parent@demo.com / parent123</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
