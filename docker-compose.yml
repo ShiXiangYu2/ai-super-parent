@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  ai-super-parent:
+    build: .
+    container_name: ai-super-parent
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - API_TOKEN=${API_TOKEN:-dev-token-123}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=gpt-4o-mini
+      - CORS_ORIGINS=*
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

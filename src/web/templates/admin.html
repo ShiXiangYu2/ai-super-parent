@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}管理后台{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">平台管理后台</h2>
+<button onclick="showAddTenant()" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 mb-4">+ 新增机构</button>
+<div id="tenants-list"></div>
+<script>
+async function loadTenants() {
+    const data = await apiFetch('/api/v1/admin/tenants');
+    if (!data) return;
+    document.getElementById('tenants-list').innerHTML = data.tenants.map(t => `
+        <div class="bg-white p-4 rounded-lg shadow-sm border mb-3">
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="font-semibold">${t.name}</span>
+                    <span class="text-sm text-gray-500 ml-2">${t.org_type} | ${t.region || '-'}</span>
+                </div>
+                <div class="text-sm">
+                    <span class="text-gray-500 mr-4">状态: ${t.subscription_status}</span>
+                    <span class="text-gray-500">最大学生: ${t.max_students}</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mt-2">联系人: ${t.contact_name || '-'} | ${t.contact_phone || '-'}</div>
+        </div>
+    `).join('');
+}
+
+function showAddTenant() {
+    const name = prompt('机构名称:');
+    if (!name) return;
+    apiFetch('/api/v1/admin/tenants', {
+        method: 'POST',
+        body: JSON.stringify({ name, admin_email: '', admin_password: 'admin123', contact_name: name + '管理员' })
+    }).then(() => loadTenants());
+}
+
+loadTenants();
+</script>
+{% endblock %}

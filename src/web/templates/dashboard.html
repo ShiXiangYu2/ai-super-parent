@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}仪表盘{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">机构仪表盘</h2>
+<div id="stats-container" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"></div>
+<div id="children-overview"></div>
+<script>
+async function loadDashboard() {
+    const stats = await apiFetch('/api/v1/tenant/stats');
+    if (!stats) return;
+    const container = document.getElementById('stats-container');
+    const cards = [
+        { label: '学生数', value: stats.student_count, color: 'bg-blue-50 text-blue-700' },
+        { label: '班级数', value: stats.class_count, color: 'bg-green-50 text-green-700' },
+        { label: '教师数', value: stats.teacher_count, color: 'bg-purple-50 text-purple-700' },
+        { label: '问答数', value: stats.advice_count, color: 'bg-orange-50 text-orange-700' },
+    ];
+    container.innerHTML = cards.map(c => `
+        <div class="bg-white p-6 rounded-lg shadow-sm border ${c.color}">
+            <div class="text-3xl font-bold">${c.value}</div>
+            <div class="text-sm mt-1">${c.label}</div>
+        </div>
+    `).join('');
+
+    // 如果是家长,显示孩子列表
+    try {
+        const payload = JSON.parse(atob(getToken().split('.')[1]));
+        if (payload.role === 'parent') {
+            const children = await apiFetch('/api/v1/my/children');
+            if (children) {
+                document.getElementById('children-overview').innerHTML = `
+                    <h3 class="text-xl font-bold mb-4">我的孩子</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        ${children.children.map(c => `
+                            <div class="bg-white p-4 rounded-lg shadow-sm border">
+                                <div class="font-semibold">${c.name}</div>
+                                <div class="text-sm text-gray-500">${c.report_count || 0} 份报告</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+    } catch(e) {}
+}
+loadDashboard();
+</script>
+{% endblock %}

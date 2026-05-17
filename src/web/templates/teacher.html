@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}教师端{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-6">我的班级</h2>
+<div id="teacher-content"></div>
+<script>
+async function loadTeacherData() {
+    const data = await apiFetch('/api/v1/teacher/students');
+    if (!data) return;
+    let html = '';
+    data.classes.forEach(c => {
+        html += '<div class="bg-white p-6 rounded-lg shadow-sm border mb-6">';
+        html += '<h3 class="text-lg font-semibold mb-4">' + c.class.name + ' (' + c.class.grade + ')</h3>';
+        if (c.students.length === 0) {
+            html += '<p class="text-gray-500">暂无学生</p>';
+        } else {
+            html += '<table class="w-full text-sm"><thead><tr class="border-b text-left"><th class="py-2">姓名</th><th>性别</th><th>出生日期</th><th>操作</th></tr></thead><tbody>';
+            c.students.forEach(s => {
+                html += '<tr class="border-b"><td class="py-2">' + s.name + '</td><td>' + (s.gender === 'male' ? '男' : '女') + '</td><td>' + (s.birth_date || '-') + '</td>';
+                html += '<td><button onclick="writeComment(\'' + s.id + '\',\'' + s.name + '\')" class="text-primary-600 hover:underline text-sm">写评语</button></td></tr>';
+            });
+            html += '</tbody></table>';
+        }
+        html += '</div>';
+    });
+    document.getElementById('teacher-content').innerHTML = html;
+}
+
+async function writeComment(studentId, studentName) {
+    const draft = prompt('输入关键点（如: 上课认真、乐于助人）:');
+    if (!draft) return;
+    const data = await apiFetch('/api/v1/communication/draft', {
+        method: 'POST',
+        body: JSON.stringify({ student_id: studentId, scenario: 'comment', highlights: draft, tone: 'warm' })
+    });
+    if (!data) return;
+    alert('AI 生成的评语:\n\n' + data.draft);
+}
+
+loadTeacherData();
+</script>
+{% endblock %}

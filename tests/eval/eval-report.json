@@ -1,0 +1,53 @@
+{
+  "eval_name": "ai-super-parent",
+  "timestamp": "2026-05-17T13:51:45Z",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "latency_ms": 0.4,
+  "test_cases": [
+    {
+      "name": "test_advice_returns_string",
+      "status": "passed"
+    },
+    {
+      "name": "test_advice_passes_age",
+      "status": "passed"
+    },
+    {
+      "name": "test_report_returns_string",
+      "status": "passed"
+    },
+    {
+      "name": "test_communication_draft_returns_string",
+      "status": "passed"
+    },
+    {
+      "name": "test_communication_draft_passes_tone",
+      "status": "passed"
+    },
+    {
+      "name": "test_extract_json",
+      "status": "passed"
+    },
+    {
+      "name": "test_extract_json_direct",
+      "status": "passed"
+    },
+    {
+      "name": "test_extract_json_invalid",
+      "status": "passed"
+    },
+    {
+      "name": "test_advice_includes_context",
+      "status": "passed"
+    },
+    {
+      "name": "test_report_includes_month",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超级家长 AI — {% block title %}家校共育智能平台{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' } } } } }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white border-b shadow-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-primary-600">超级家长 AI</a>
+                    <div id="nav-links" class="ml-8 hidden md:flex space-x-4"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="user-name" class="text-sm text-gray-600 hidden"></span>
+                    <button id="btn-logout" onclick="logout()" class="hidden text-sm text-red-500 hover:text-red-700">退出</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        const API = window.location.origin;
+
+        function getToken() { return localStorage.getItem('token'); }
+
+        function apiHeaders() {
+            const h = { 'Content-Type': 'application/json' };
+            const t = getToken();
+            if (t) h['Authorization'] = 'Bearer ' + t;
+            return h;
+        }
+
+        async function apiFetch(path, opts = {}) {
+            const res = await fetch(API + path, { ...opts, headers: { ...apiHeaders(), ...opts.headers } });
+            if (res.status === 401) { localStorage.removeItem('token'); window.location.href = '/app/login'; return null; }
+            return res.json();
+        }
+
+        function updateNav() {
+            const token = getToken();
+            const nameEl = document.getElementById('user-name');
+            const logoutEl = document.getElementById('btn-logout');
+            const navLinks = document.getElementById('nav-links');
+            if (!token) {
+                nameEl.classList.add('hidden');
+                logoutEl.classList.add('hidden');
+                navLinks.innerHTML = '<a href="/app/login" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">登录</a>';
+                return;
+            }
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                nameEl.textContent = payload.name + ' (' + payload.role + ')';
+                nameEl.classList.remove('hidden');
+                logoutEl.classList.remove('hidden');
+
+                let links = '';
+                if (payload.role === 'parent') {
+                    links += '<a href="/app/dashboard" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">首页</a>';
+                    links += '<a href="/app/children" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">我的孩子</a>';
+                    links += '<a href="/app/advice" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">育儿问答</a>';
+                    links += '<a href="/app/reports" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">成长报告</a>';
+                } else if (payload.role === 'teacher') {
+                    links += '<a href="/app/teacher" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">我的班级</a>';
+                } else if (payload.role === 'tenant_admin') {
+                    links += '<a href="/app/dashboard" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">仪表盘</a>';
+                    links += '<a href="/app/classes" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">班级管理</a>';
+                } else if (payload.role === 'super_admin') {
+                    links += '<a href="/app/admin" class="text-gray-600 hover:text-primary-600 px-3 py-2 text-sm">管理后台</a>';
+                }
+                navLinks.innerHTML = links;
+            } catch(e) { navLinks.innerHTML = ''; }
+        }
+
+        function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
+
+        document.addEventListener('DOMContentLoaded', updateNav);
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
