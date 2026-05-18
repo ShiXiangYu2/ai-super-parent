@@ -134,6 +134,15 @@ scripts/
 | 教师端 | GET /api/v1/teacher/students | 班级学生一览 |
 | 管理后台 | GET/POST /api/v1/admin/tenants | 租户管理 |
 
+## 文档
+
+| 文档 | 说明 |
+|------|------|
+| [📖 产品使用指南](docs/usage-guide.md) | 完整的产品功能说明、角色操作步骤、API 参考 |
+| [🎬 产品演示导览](docs/demo-tour.html) | 交互式产品演示，自动播放导览（浏览器打开） |
+| [📡 API 文档](docs/api.md) | 完整 API 端点参考 |
+| [🚀 部署指南](docs/deploy.md) | Docker 部署和生产环境配置 |
+
 完整 API 文档见 [docs/api.md](docs/api.md)。
 
 ## 运行测试
